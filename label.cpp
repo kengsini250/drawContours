@@ -13,10 +13,10 @@ void Label::mousePressEvent(QMouseEvent *e)
     if(e->button() == Qt::LeftButton)
     {
         isLeftPressed = true;
-        curr.setX(e->pos().x()/ZoomValue);
-        curr.setY(e->pos().y()/ZoomValue);
-        temp.setX(e->pos().x()/ZoomValue);
-        temp.setY(e->pos().y()/ZoomValue);
+        curr.setX(e->pos().x()/ZoomValue-oldpos.x()/ZoomValue);
+        curr.setY(e->pos().y()/ZoomValue-oldpos.y()/ZoomValue);
+        temp.setX(e->pos().x()/ZoomValue-oldpos.x()/ZoomValue);
+        temp.setY(e->pos().y()/ZoomValue-oldpos.y()/ZoomValue);
     }
     if(e->button() == Qt::RightButton)
     {
@@ -29,8 +29,8 @@ void Label::mouseMoveEvent(QMouseEvent *e)
 {
     if(isLeftPressed)
     {
-        temp.setX(e->pos().x()/ZoomValue);
-        temp.setY(e->pos().y()/ZoomValue);
+        temp.setX(e->pos().x()/ZoomValue-oldpos.x()/ZoomValue);
+        temp.setY(e->pos().y()/ZoomValue-oldpos.y()/ZoomValue);
         points.push_back(temp);
     }
     if(isRightPressed)

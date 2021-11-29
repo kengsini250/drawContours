@@ -45,7 +45,7 @@ DrawContour::DrawContour(QWidget *parent)
             t = img(area_rectx);
         }
 
-        cv::imwrite("C:\\Users\\DongSheng\\Desktop\\err\\test.jpg",t);
+        cv::imwrite("C:\\Users\\lenovo\\Desktop\\test.jpg",t);
     });
 }
 

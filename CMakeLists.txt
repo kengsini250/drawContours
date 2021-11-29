@@ -16,6 +16,8 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 include_directories(D:/opencv4.1.0/opencv/build/include)#include opencv
 link_directories(D:/opencv4.1.0/opencv/build/x64/vc15/lib)#opencv.lib
+include_directories(C:/opencv/build/include)#include opencv
+link_directories(C:/opencv/build/x64/vc15/lib)#opencv.lib
 
 set(PROJECT_SOURCES
         main.cpp
@@ -49,7 +51,8 @@ else()
     endif()
 endif()
 
-target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world410d)
+#target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world410d)
+target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world452d)
 
 set_target_properties(drawContours PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
