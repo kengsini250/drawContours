@@ -28,13 +28,12 @@ private:
     bool isRightPressed = false;
     QPoint curr,temp;
     qreal ZoomValue = 1.0;  //鼠标缩放值
-    qreal ZoomValueTemp = 1.0;
 
     QPoint oldpos,temppos,newpos;
     int px=0,py=0;
 
     int count = 0;
-    QList<QPoint> points,points_temp;
+    QList<QPoint> points;
 protected:
     void mousePressEvent(QMouseEvent*e)override;
     void mouseMoveEvent(QMouseEvent*e)override;

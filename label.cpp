@@ -6,7 +6,6 @@ Label::Label(QWidget *p):QLabel(p)
 void Label::clear()
 {
     points.clear();
-    points_temp.clear();
     contours.clear();
     count = 0;
 }
@@ -35,7 +34,6 @@ void Label::mouseMoveEvent(QMouseEvent *e)
         temp.setX(e->pos().x()/ZoomValue-oldpos.x()/ZoomValue);
         temp.setY(e->pos().y()/ZoomValue-oldpos.y()/ZoomValue);
         points.push_back(temp);
-        points_temp.push_back(temp);
     }
     if(isRightPressed)
     {
@@ -52,16 +50,16 @@ void Label::mouseReleaseEvent(QMouseEvent *e)
 {
     if (isLeftPressed) { 
         isLeftPressed = false; 
+        if (!points.isEmpty()) {
+            contours.insert(count++, points);
+            points.clear();
+        }
     }
     if(isRightPressed)
     {
         isRightPressed = false;
         if(e->pos() == temppos)
         {
-            if (!points.isEmpty()) {
-                contours.insert(count++, points);
-                points.clear();
-            }
         }
         else
         {
@@ -85,7 +83,6 @@ void Label::wheelEvent(QWheelEvent* event)
     float min = 0.2f;
 
     QPoint value = event->angleDelta();
-    ZoomValueTemp = ZoomValue;
 
     if (value.y() > 0)  //放大
     {
@@ -114,12 +111,17 @@ void Label::paintEvent(QPaintEvent *e)
     p.scale(ZoomValue,ZoomValue);
     p.drawPixmap(oldpos.x()/ZoomValue,oldpos.y()/ZoomValue, img.width(), img.height(), QPixmap::fromImage(img));
 
-    for (int i = 0; i < points_temp.size(); i++) {
-        p.drawPoint(points_temp[i].x() + oldpos.x() / ZoomValue, points_temp[i].y() + oldpos.y() / ZoomValue);
+    if(isLeftPressed){
+        for (int i = 0; i < points.size(); i++) {
+            p.drawPoint(points[i].x() + oldpos.x() / ZoomValue, points[i].y() + oldpos.y() / ZoomValue);
+        }
     }
 
-    if(isLeftPressed){
-        p.drawPoint(curr);
+    for(int j=0;j<contours.size();j++){
+        auto ccc = contours[j];
+        for (int i = 0; i < ccc.size(); i++) {
+            p.drawPoint(ccc[i].x() + oldpos.x() / ZoomValue, ccc[i].y() + oldpos.y() / ZoomValue);
+        }
     }
 
     update();
