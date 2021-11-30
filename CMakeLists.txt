@@ -21,10 +21,8 @@ link_directories(C:/opencv/build/x64/vc15/lib)#opencv.lib
 
 set(PROJECT_SOURCES
         main.cpp
-        drawcontour.cpp
-        drawcontour.h
-        label.h
-        label.cpp
+        drawcontour.cpp	drawcontour.h
+        label.h	label.cpp
         widget_contour.ui
 )
 
@@ -51,8 +49,8 @@ else()
     endif()
 endif()
 
-#target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world410d)
-target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world452d)
+target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world410d)
+#target_link_libraries(drawContours PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_world452d)
 
 set_target_properties(drawContours PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

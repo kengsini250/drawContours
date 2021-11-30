@@ -6,6 +6,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPoint>
+#include <QMap>
 #include <QList>
 #include <QImage>
 #include <QWheelEvent>
@@ -15,7 +16,8 @@ class Label : public QLabel
     Q_OBJECT
 public:
     Label(QWidget *parent=nullptr);
-    QList<QPoint> points;
+
+    QMap<int, QList<QPoint>> contours;
     QImage img;
 
 public slots:
@@ -30,6 +32,9 @@ private:
 
     QPoint oldpos,temppos,newpos;
     int px=0,py=0;
+
+    int count = 0;
+    QList<QPoint> points,points_temp;
 protected:
     void mousePressEvent(QMouseEvent*e)override;
     void mouseMoveEvent(QMouseEvent*e)override;

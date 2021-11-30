@@ -20,14 +20,22 @@ DrawContour::DrawContour(QWidget *parent)
        label->img.load(file);
     });
 
+
+
     connect(ui->pushButton_save,&QPushButton::clicked,this,[this]{
-        std::vector<cv::Point> data;
-        for(int i=0;i<label->points.size();i++)
-            data.push_back(cv::Point(label->points[i].x(),label->points[i].y()));
+        std::vector<std::vector<cv::Point>> c;
+
+        //QMap->QList->vector
+        for (int i = 0; i < label->contours.size(); i++) {
+            std::vector<cv::Point> data;
+            QList curr = label->contours[i];
+            for (int j = 0; j < curr.size(); j++) {
+                data.push_back(cv::Point(curr[j].x(), curr[j].y()));
+            }
+            c.push_back(data);
+        }
 
         cv::Mat img = cv::imread(file.toStdString());
-        std::vector<std::vector<cv::Point>> c;
-        c.push_back(data);
 
         cv::Mat mask(img.rows, img.cols, CV_8UC1,cv::Scalar(0));
         cv::drawContours(mask,c,-1,cv::Scalar(255),-1);
@@ -43,9 +51,9 @@ DrawContour::DrawContour(QWidget *parent)
         {
             cv::Rect area_rectx = cv::boundingRect(contour[i]);
             t = img(area_rectx);
+            cv::imwrite("C:\\Users\\DongSheng\\Desktop\\err\\test"+std::to_string(i+1) + ".bmp", t);
         }
-
-        cv::imwrite("C:\\Users\\lenovo\\Desktop\\test.jpg",t);
+        
     });
 }
 

@@ -8,6 +8,7 @@
 
 #include "opencv2/opencv.hpp"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class DrawContour; }
 QT_END_NAMESPACE

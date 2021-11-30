@@ -6,6 +6,9 @@ Label::Label(QWidget *p):QLabel(p)
 void Label::clear()
 {
     points.clear();
+    points_temp.clear();
+    contours.clear();
+    count = 0;
 }
 
 void Label::mousePressEvent(QMouseEvent *e)
@@ -32,6 +35,7 @@ void Label::mouseMoveEvent(QMouseEvent *e)
         temp.setX(e->pos().x()/ZoomValue-oldpos.x()/ZoomValue);
         temp.setY(e->pos().y()/ZoomValue-oldpos.y()/ZoomValue);
         points.push_back(temp);
+        points_temp.push_back(temp);
     }
     if(isRightPressed)
     {
@@ -46,19 +50,31 @@ void Label::mouseMoveEvent(QMouseEvent *e)
 
 void Label::mouseReleaseEvent(QMouseEvent *e)
 {
-    if(isLeftPressed)	isLeftPressed = false;
+    if (isLeftPressed) { 
+        isLeftPressed = false; 
+    }
     if(isRightPressed)
     {
         isRightPressed = false;
-        int dx = newpos.x()-temppos.x();
-        int dy = newpos.y()-temppos.y();
-        oldpos.setX(oldpos.x()+dx);
-        oldpos.setY(oldpos.y()+dy);
-        temppos = newpos;
+        if(e->pos() == temppos)
+        {
+            if (!points.isEmpty()) {
+                contours.insert(count++, points);
+                points.clear();
+            }
+        }
+        else
+        {
+            int dx = newpos.x() - temppos.x();
+            int dy = newpos.y() - temppos.y();
+            oldpos.setX(oldpos.x() + dx);
+            oldpos.setY(oldpos.y() + dy);
+            temppos = newpos;
 
-        for(int i=0;i<points.size();i++){
-            points[i].setX(points[i].x()+dx);
-            points[i].setY(points[i].y()+dy);
+            for (int i = 0; i < points.size(); i++) {
+                points[i].setX(points[i].x() + dx);
+                points[i].setY(points[i].y() + dy);
+            }
         }
     }
 }
@@ -84,8 +100,6 @@ void Label::wheelEvent(QWheelEvent* event)
             ZoomValue = min;
         }
     }
-
-
 }
 
 void Label::paintEvent(QPaintEvent *e)
@@ -100,9 +114,8 @@ void Label::paintEvent(QPaintEvent *e)
     p.scale(ZoomValue,ZoomValue);
     p.drawPixmap(oldpos.x()/ZoomValue,oldpos.y()/ZoomValue, img.width(), img.height(), QPixmap::fromImage(img));
 
-    for(int i=0;i<points.size();i++){
-//        p.drawPoint(points[i]);
-        p.drawPoint(points[i].x()+ oldpos.x()/ZoomValue,points[i].y()+ oldpos.y()/ZoomValue);
+    for (int i = 0; i < points_temp.size(); i++) {
+        p.drawPoint(points_temp[i].x() + oldpos.x() / ZoomValue, points_temp[i].y() + oldpos.y() / ZoomValue);
     }
 
     if(isLeftPressed){
